@@ -22,10 +22,14 @@ Version: 1.0.0
 """
 
 def display_intro():
-    # Read the introduction text from the story_introduction.txt file.
-    with open("story_introduction.txt", "r") as file:
-        intro = file.read()
-        print(intro)
+    try:
+        with open(".\story_introduction.txt", "r") as file:
+            intro = file.read()
+            print(intro)
+    except FileNotFoundError:
+        print("Error: 'story_introduction.txt' file not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     display_intro()
