@@ -172,6 +172,33 @@ class Player:
     def sneak(self, target):
         return self.stats['intelligence'] * 2 + random.randint(5, 10)
     
+    def add_loot(self, loot):
+        # Check if item is already in inventory if so, increase quantity, and if not, add it to inventory with quantity 1
+        for item in self.inventory:
+            if item == loot:
+                self.inventory[item] += 1
+                break
+            else:
+                self.inventory[loot] = 1
+    
+    def add_experience(self, experience):
+        self.experience_points += experience
+        print(f"{self.name} gains {experience} experience points!")
+        if self.experience_points >= 100:
+            self.level_up()
+    
+    def level_up(self):
+        self.level += 1
+        self.experience_points = 0
+        print(f"{self.name} has leveled up to level {self.level}!")
+        self.stats['health'] += 10
+        self.stats['attack'] += 2
+        self.stats['defense'] += 2
+        self.stats['stamina'] += 2 
+        self.stats['mana'] += 4
+        self.stats['intelligence'] += 4
+        print(f"{self.name}'s stats have increased!")
+    
     def display_stats(self):
         print(f"\n{self.name} ({self.character_class}) - Level {self.level}")
         print("Health:", self.stats['health'])

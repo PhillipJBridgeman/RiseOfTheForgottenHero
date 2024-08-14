@@ -24,25 +24,36 @@ class Tutorial:
     
     def combat_tutorial(self):
         print("\n*** Tutorial: Combat Basics ***")
-        print("You step outside the old lady's house and encounter a hostile creature.")
+        print("You step outside the old lady's house and encounter hostile creatures.")
         print("Let's go over how combat works in this world.")
 
-        # Introduce the first enemy using the Enemy class
-        enemy = Enemy(player_level=self.player.level)  # Assume player has a level attribute
-        combat = Combat(self.player, enemy)
+        while True:
+            # Introduce the first enemy (a rat for the tutorial)
+            enemy = Enemy(player_level=self.player.level, type_override="rat")
+        
+            if not self.is_rat_and_within_level(enemy):
+                print("This enemy is not suitable for the tutorial. Exiting...")
+                break
+        
+            combat = Combat(self.player, enemy)
+            combat.start_combat()
 
-        # Explain the basics of combat
-        print("\nCombat is turn-based. Each turn, you can choose an action like 'attack' or 'use skill'.")
-        print("The enemy will also take turns attacking you. Manage your stamina and health carefully!")
-
-        # Start the tutorial combat
-        combat.start_combat()
-
-        if self.player.is_alive():
-            print("\nYou have defeated the Wild Rat!")
-            print("Congratulations! You now understand the basics of combat.")
-            print("You can now explore the world and engage in more challenging battles.")
-        else:
-            print("\nYou were defeated in the tutorial. Don't worry, you can try again.")
-            self.player.health = 100  # Reset player health for retry
-            self.combat_tutorial()  # Restart the tutorial combat
+            if self.player.is_alive():
+                print(f"\nYou have defeated the {enemy.name}!")
+                loot = enemy.enemy_loot()
+                if loot:
+                    self.player.add_loot(loot)
+                self.player.add_experience(enemy.experience_reward)
+                print("Congratulations! You now understand the basics of combat.")
+                print("You can fight another rat or exit the tutorial.")
+            
+                continue_fighting = input("Do you want to fight another rat? (yes/no): ").lower()
+                if continue_fighting != 'yes':
+                    break
+            else:
+                print("\nYou were defeated in the tutorial. Don't worry, you can try again.")
+                self.player.health = 100
+                break
+    
+    def is_rat_and_within_level(self, enemy):
+        return enemy.type == "rat" and 1 <= enemy.level <= 3
