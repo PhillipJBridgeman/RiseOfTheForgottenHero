@@ -1,5 +1,6 @@
 from player import Player
 from combat import Combat
+from enemy import Enemy  # Import the Enemy class
 
 class Tutorial:
     def __init__(self, player):
@@ -26,8 +27,8 @@ class Tutorial:
         print("You step outside the old lady's house and encounter a hostile creature.")
         print("Let's go over how combat works in this world.")
 
-        # Introduce the first enemy (a weak one for the tutorial)
-        enemy = Player(name="Wild Rat", character_class="Rogue", health=30)
+        # Introduce the first enemy using the Enemy class
+        enemy = Enemy(player_level=self.player.level)  # Assume player has a level attribute
         combat = Combat(self.player, enemy)
 
         # Explain the basics of combat
@@ -45,4 +46,3 @@ class Tutorial:
             print("\nYou were defeated in the tutorial. Don't worry, you can try again.")
             self.player.health = 100  # Reset player health for retry
             self.combat_tutorial()  # Restart the tutorial combat
-        
