@@ -60,6 +60,7 @@ def main_game_loop(player):
 if __name__ == "__main__":
     display_intro()
     player = Player()
+    player.display_stats()
     print(f"\nWelcome, {player.name}! Your journey begins now.")
     tutorial = Tutorial(player)
     tutorial.start()

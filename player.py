@@ -27,7 +27,7 @@ class Player:
         self.character_class = self.choose_class()
         self.level = 1
         self.experience_points = 0
-        self.inventory = []
+        self.inventory = {}
         self.equipment = {
             'weapon': None,
             'armor': None,
