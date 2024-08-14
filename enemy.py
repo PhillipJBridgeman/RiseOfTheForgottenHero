@@ -9,6 +9,7 @@ import random
 class Enemy:
     def __init__(self, player_level, is_boss=False, type_override=None):
         self.type = type_override if type_override else self.enemy_type(player_level)
+        self.name = self.type  # Assign the type to the name attribute
         self.level = self.enemy_level(player_level)
         self.is_boss = is_boss
         self.stats = self.initialize_stats()
