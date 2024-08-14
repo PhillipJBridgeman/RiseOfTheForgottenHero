@@ -19,10 +19,11 @@ Run this file to start the game.
 
 Version: 1.0.0
 """
-
 # Import the Player class from player.py
 from player import Player
+from combat import Combat
 from intro import display_intro
+from tutorial import Tutorial
 
 def main_game_loop(player):
     game_running = True
@@ -43,9 +44,7 @@ def main_game_loop(player):
         # Handle the player's choice
         if choice == '1':
             # Implement explore function (e.g., encounter an enemy)
-            print("\nYou explore the area...")
-            enemy = Player(name="Goblin", class_character="Rogue", health=50)
-            player.attack_enemy(enemy)
+            print("\nExploring... (This feature is not yet implemented)")
         elif choice == '2':
             player.health = min(100, player.health + 20)
             print(f"\n{player.name} rests and recovers health. Current health: {player.health}")
@@ -60,11 +59,9 @@ def main_game_loop(player):
 
 if __name__ == "__main__":
     display_intro()
+    player = Player()
+    print(f"\nWelcome, {player.name}! Your journey begins now.")
+    tutorial = Tutorial(player)
+    tutorial.start()
+    #main_game_loop(player)
     
-    # Create a new player character
-    player_name = input("Enter your hero's name: ")
-    player_class = input("Choose your hero's class (Warrior, Mage, or Rogue): ").capitalize()
-    player = Player(name=player_name, class_character=player_class)
-
-    # Start the game loop
-    main_game_loop(player)
