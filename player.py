@@ -20,6 +20,7 @@ This file is intended to be imported and used within the main game script.
 Version: 1.0.0
 """
 import random
+from collections import defaultdict
 
 class Player:
     def __init__(self):
@@ -27,7 +28,8 @@ class Player:
         self.character_class = self.choose_class()
         self.level = 1
         self.experience_points = 0
-        self.inventory = {}
+        self.experience_to_next_level = 100
+        self.inventory = defaultdict(int)
         self.equipment = {
             'weapon': None,
             'armor': None,
@@ -45,14 +47,13 @@ class Player:
         self.initialize_player_class()
 
     def choose_name(self):
-        # Only accept letter characters for the player's name
         while True:
             name = input("What is your name, hero? ")
             if name.isalpha():
                 return name
             else:
                 print("Please enter a valid name using only letters.")
-    
+
     def choose_class(self):
         while True:
             print("Choose your class:")
@@ -68,7 +69,7 @@ class Player:
                 return 'Rogue'
             else:
                 print("Please enter a valid class choice.")
-    
+
     def initialize_player_class(self):
         if self.character_class == 'Warrior':
             self.stats.update({
@@ -83,9 +84,9 @@ class Player:
                 'accessory': 'Knight Ring'
             })
             self.skills.update({
-                'slash': self.slash,
-                'block': self.block,
-                'charge': self.charge
+                'slash': (self.slash, 3, 0, "A powerful slashing attack."),
+                'block': (self.block, 2, 0, "Block incoming attacks, reducing damage."),
+                'charge': (self.charge, 5, 0, "Charge up for a powerful attack.")
             })
         elif self.character_class == 'Mage':
             self.stats.update({
@@ -101,9 +102,9 @@ class Player:
                 'accessory': 'Old Mage Amulet'
             })
             self.skills.update({
-                'fireball': self.fireball,
-                'heal': self.heal,
-                'lightning': self.lightning
+                'fireball': (self.fireball, 0, 5, "Cast a fiery ball at the enemy."),
+                'heal': (self.heal, 0, 4, "Heal yourself."),
+                'lightning': (self.lightning, 0, 7, "Strike the enemy with lightning.")
             })
         elif self.character_class == 'Rogue':
             self.stats.update({
@@ -118,23 +119,21 @@ class Player:
                 'accessory': 'Thief Bandana'
             })
             self.skills.update({
-                'stab': self.stab,
-                'dodge': self.dodge,
-                'lockpick': self.lockpick,
-                'sneak': self.sneak
+                'stab': (self.stab, 2, 0, "A quick stabbing attack."),
+                'dodge': (self.dodge, 3, 0, "Dodge incoming attacks."),
+                'sneak': (self.sneak, 1, 0, "Move stealthily to avoid detection.")
             })
-        else:
-            print("Invalid class choice. Please choose again.")
-            self.character_class = self.choose_class()
-            self.initialize_player_class()
-        
+
     def slash(self, target):
+        """A powerful slashing attack."""
         return self.stats['attack'] + random.randint(5, 10)
 
     def fireball(self, target):
+        """Cast a fiery ball at the enemy."""
         return self.stats['intelligence'] * 2 + random.randint(5, 10)
 
     def stab(self, target):
+        """A quick stabbing attack."""
         return self.stats['attack'] + random.randint(3, 8)
 
     def take_damage(self, damage):
@@ -143,62 +142,55 @@ class Player:
 
     def is_alive(self):
         return self.stats['health'] > 0
-    
-    # Block allows the player to reduce incoming damage then if the player block + defense is greater than the incoming damage, the player takes no damage 
+
     def block(self, target):
+        """Block incoming attacks, reducing damage."""
         return self.stats['defense'] + random.randint(1, 5)
-    
-    # Charge allows the player to increase their attack power for a turn
+
     def charge(self, target):
+        """Charge up for a powerful attack."""
         return self.stats['attack'] + random.randint(5, 10)
-    
-    # Heal allows the player to heal themselves
+
     def heal(self, target):
+        """Heal yourself."""
         return self.stats['health'] + random.randint(5, 10)
-    
-    # Lightning allows the player to use their intelligence to attack
+
     def lightning(self, target):
+        """Strike the enemy with lightning."""
         return self.stats['intelligence'] * 2 + random.randint(5, 10)
-    
-    # Dodge allows the player to dodge incoming attacks
+
     def dodge(self, target):
+        """Dodge incoming attacks."""
         return self.stats['defense'] + random.randint(1, 5)
-    
-    # Lockpick allows the player to unlock doors and chests
-    def lockpick(self, target):
-        return self.stats['intelligence'] * 2 + random.randint(5, 10)
-    
-    # Sneak allows the player to sneak past enemies
+
     def sneak(self, target):
+        """Move stealthily to avoid detection."""
         return self.stats['intelligence'] * 2 + random.randint(5, 10)
-    
+
     def add_loot(self, loot):
-        # Check if item is already in inventory if so, increase quantity, and if not, add it to inventory with quantity 1
-        for item in self.inventory:
-            if item == loot:
-                self.inventory[item] += 1
-                break
-            else:
-                self.inventory[loot] = 1
-    
+        self.inventory[loot] += 1
+        print(f"{loot} added to inventory. Total: {self.inventory[loot]}")
+
     def add_experience(self, experience):
         self.experience_points += experience
         print(f"{self.name} gains {experience} experience points!")
-        if self.experience_points >= 100:
+        if self.experience_points >= self.experience_to_next_level:
             self.level_up()
-    
+
     def level_up(self):
         self.level += 1
-        self.experience_points = 0
+        self.experience_points -= self.experience_to_next_level
+        self.experience_to_next_level = int(self.experience_to_next_level * 1.5)
         print(f"{self.name} has leveled up to level {self.level}!")
         self.stats['health'] += 10
         self.stats['attack'] += 2
         self.stats['defense'] += 2
-        self.stats['stamina'] += 2 
+        self.stats['stamina'] += 2
         self.stats['mana'] += 4
         self.stats['intelligence'] += 4
         print(f"{self.name}'s stats have increased!")
-    
+        print(self.display_stats())
+
     def display_stats(self):
         print(f"\n{self.name} ({self.character_class}) - Level {self.level}")
         print("Health:", self.stats['health'])
@@ -211,5 +203,6 @@ class Player:
         for slot, item in self.equipment.items():
             print(f"- {slot}: {item}")
         print("Skills:")
-        for skill_name, skill_func in self.skills.items():
-            print(f"- {skill_name}: {skill_func.__doc__}")
+        for skill_name, skill_details in self.skills.items():
+            _, stamina_cost, mana_cost, description = skill_details
+            print(f"- {skill_name}: {description} (Cost: {stamina_cost} stamina, {mana_cost} mana)")
