@@ -96,8 +96,27 @@ class Enemy:
         return random.choice(loot_table.get(self.type, []))
 
     def enemy_experience_reward(self):
-        base_reward = self.level * 10
-        return base_reward * 2 if self.is_boss else base_reward
+        # Base reward scaling based on level ranges
+        level_ranges = [
+            (5, 50),
+            (10, 40),
+            (15, 30),
+            (20, 20),
+            (25, 10),
+            (30, 5),
+            (35, 2),
+            (40, 1)
+        ]
+
+        if self.is_boss:
+            return 500 * self.level
+
+        for max_level, multiplier in level_ranges:
+            if self.level <= max_level:
+                return multiplier * self.level
+
+        # Default case for levels above 40
+        return self.level
 
     def take_damage(self, damage):
         self.stats['health'] -= damage
