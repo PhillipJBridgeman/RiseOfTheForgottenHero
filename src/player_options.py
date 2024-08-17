@@ -5,19 +5,22 @@ class Player_Options:
     def display_options(self):
         while True:
             user_input = input("""What would you like to do?
-            1. Go to the Inn
-            2. Go to the Town
-            3. Rest
-            4. Review your Stats
-            5. Read Lore
-            6. Review Inventory
-            7. Save Game
-            8. Quit
-            """)
+1. Go to the Inn
+2. Go to the Town
+3. Rest
+4. Review your Stats
+5. Read Lore
+6. Review Inventory
+7. Save Game
+8. Quit
+""")
 
             if user_input == "1":
+                from inn import Inn
                 # Implement logic to go to the inn
-                pass
+                print("You decided to go back to the inn.")
+                inn = Inn()
+                inn.interact(self.player)
             elif user_input == "2":
                 # Implement logic to go to the town
                 pass

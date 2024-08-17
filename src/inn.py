@@ -1,4 +1,3 @@
-from player_options import Player_Options
 from innkeeper import Innkeeper
 
 class Inn:
