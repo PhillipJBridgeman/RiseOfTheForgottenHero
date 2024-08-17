@@ -36,8 +36,14 @@ from town import Town
 # from save_load import SaveLoad
 
 def display_intro():
-    with open("../story_introduction.txt", "r") as file:
-        print(file.read())
+    try:
+        with open("src/story_introduction.txt", "r") as file:
+            intro = file.read()
+            print(intro)
+    except FileNotFoundError:
+        print("Error: 'story_introduction.txt' file not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def main_menu(player):
     while True:

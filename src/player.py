@@ -176,6 +176,10 @@ class Player:
         print(f"{self.name} gains {experience} experience points!")
         if self.experience_points >= self.experience_to_next_level:
             self.level_up()
+    
+    def add_gold(self, gold):
+        self.inventory['gold'] += gold
+        print(f"{gold} gold added to inventory. Total: {self.inventory['gold']}")
 
     def level_up(self):
         self.level += 1
