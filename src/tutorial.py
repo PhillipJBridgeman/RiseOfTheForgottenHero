@@ -71,6 +71,7 @@ class Tutorial:
         loot = enemy.enemy_loot()
         if loot:
             self.player.add_loot(loot)
+            self.player.add_gold(enemy.gold_drop())
         self.player.add_experience(enemy.enemy_experience_reward())
 
     def is_rat_and_within_level(self, enemy):
