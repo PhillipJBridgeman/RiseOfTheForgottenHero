@@ -190,6 +190,13 @@ class Player:
         self.stats['intelligence'] += 4
         print(f"{self.name}'s stats have increased!")
         print(self.display_stats())
+        
+    def display_inventory(self):
+        # Sort the inventory from having the most to least items
+        sorted_inventory = sorted(self.inventory.items(), key=lambda x: x[1], reverse=True)
+        print("\nInventory:")
+        for item, quantity in sorted_inventory:
+            print(f"- {item}: {quantity}")
 
     def display_stats(self):
         print(f"\n{self.name} ({self.character_class}) - Level {self.level}")
