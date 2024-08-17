@@ -43,6 +43,7 @@ class Player:
             'mana': 0,
             'intelligence': 0
         }
+        self.max_stats = self.stats.copy()
         self.skills = {}
         self.initialize_player_class()
 
@@ -123,6 +124,12 @@ class Player:
                 'dodge': (self.dodge, 3, 0, "Dodge incoming attacks."),
                 'sneak': (self.sneak, 1, 0, "Move stealthily to avoid detection.")
             })
+            
+    def rest(self):
+        self.stats['health'] = self.max_stats['health']
+        self.stats['stamina'] = self.max_stats['stamina']
+        self.stats['mana'] = self.max_stats['mana']
+        print(f"{self.name} has rested. Health, stamina, and mana are fully restored!")
 
     def slash(self, target):
         """A powerful slashing attack."""
@@ -186,12 +193,21 @@ class Player:
         self.experience_points -= self.experience_to_next_level
         self.experience_to_next_level = int(self.experience_to_next_level * 1.5)
         print(f"{self.name} has leveled up to level {self.level}!")
+        
         self.stats['health'] += 10
         self.stats['attack'] += 2
         self.stats['defense'] += 2
         self.stats['stamina'] += 2
         self.stats['mana'] += 4
         self.stats['intelligence'] += 4
+        
+        self.max_stats['health'] += self.stats['health']
+        self.max_stats['attack'] += self.stats['attack']
+        self.max_stats['defense'] += self.stats['defense']
+        self.max_stats['stamina'] += self.stats['stamina']
+        self.max_stats['mana'] += self.stats['mana']
+        self.max_stats['intelligence'] += self.stats['intelligence']
+
         print(f"{self.name}'s stats have increased!")
         self.display_stats()
         

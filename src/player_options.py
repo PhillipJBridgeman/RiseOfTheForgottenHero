@@ -17,13 +17,14 @@ class Player_Options:
 
             if user_input == "1":
                 from inn import Inn
-                # Implement logic to go to the inn
-                print("You decided to go back to the inn.")
+                print("You decided to go back to the inn and the talk to the innkeeper.")
                 inn = Inn()
                 inn.interact(self.player)
             elif user_input == "2":
-                # Implement logic to go to the town
-                pass
+                from town import Town
+                print("You decided to go to the town.")
+                town = Town(self.player)
+                town.town_menu()
             elif user_input == "3":
                 # Implement logic to restpasselif user_input == "4":
                 self.player.display_stats()
